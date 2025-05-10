@@ -8,7 +8,7 @@ This project processes user-uploaded images efficiently using **Web Workers** to
 ---
 
 ## **Live**
-- https://muhammedshahid.github.io/Binarize/
+- https://muhammedshahid.github.io/BinarizeV2/
 
 ---
 
