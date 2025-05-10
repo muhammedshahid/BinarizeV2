@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Responsive UI</title>
+    <link rel="stylesheet" href="./ui2.css">
+  </head>
+  <body>
+    <div class="container">
+      <!-- Delete confirmation box -->
+      <div id="deleteConfirmation" class="deleteBox__container hidden">
+        <div class="delete-confirmation">
+          <div class="dialog-content">
+            <h2>Are you sure?</h2>
+            <p class="sub-heading">This action cannot be undone</p>
+            <p>Delete <span class="count">31</span> item(s)</p>
+            <div class="dialog-actions">
+              <button class="cancel-btn">Cancel</button>
+              <button class="confirm-btn">Delete</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Toast notification -->
+      <div class="toast__container">
+        <!-- <div class="toast">
+          <p>Notification Message</p>
+          <button class="close-toast">❌</button>
+        </div> -->
+      </div>
+      <!-- Modal -->
+      <div id="modal" class="modal__container" role="modal" aria-labelledby="gallery" aria-describedby="galleryViewer">
+        <!-- <div class="modal__content">
+        <button class="close-modal">❌</button>
+        <img class="modal-image" src="" alt="Modal Image" />
+      </div> -->
+      </div>
+
+      <!-- Info box and Download box -->
+      <div id="infoBoxContainer" class="info-box__container">
+        <!-- Download box -->
+        <!-- <div class="info-box">
+          <div class="info-header">
+            <span class="info-title">Downloading...</span>
+            <button class="info-close" aria-label="Close">&times;</button>
+          </div>
+          <div class="info-progress">
+            <div class="progress-bar">
+              <div class="progress" style="width: 0%"></div>
+            </div>
+            <span class="progress-status">0%</span>
+          </div>
+        </div> -->
+
+      </div>
+
+      <!-- Remove confirmation box -->
+      <div id="confirmationBox" class="confirmationBox hidden" role="dialog" aria-labelledby="confirmationHeading" aria-describedby="confirmationDescription">
+        <h3 id="confirmationHeading">Are you sure?</h3>
+        <p id="confirmationDescription">Remove <code></code></p>
+        <div class="confirmationBox__buttons">
+          <button class="confirmationBox__button yes" aria-label="Confirm">Yes</button>
+          <button class="confirmationBox__button no" aria-label="Cancel">No</button>
+        </div>
+      </div>
+      
+      <!-- batch operations -->
+      <div class="batch__operations">
+        <nav>
+          <ul>
+            <li class="operation" role="Process">
+              <span class="icon">🔄</span>
+              <span class="text">Process</span>
+            </li>
+            <li class="operation" role="Save">
+              <span class="icon">💾</span>
+              <span class="text">Save</span>
+            </li>
+            <li class="operation" role="Download">
+              <span class="icon">⬇️</span>
+              <span class="text">Download</span>
+            </li>
+            <li class="operation" role="Delete">
+              <span class="icon">🗑️</span>
+              <span class="text">Delete</span>
+            </li>
+          </ul>
+        </nav>
+      </div>
+
+      <header>
+        <h1 class="header__title">Binarize Images</h1>
+        <p class="header__subtitle">
+          Drop or Select images to start processing
+        </p>
+        <section id="dropArea" class="drop__area">
+          <input type="file" id="fileInput" multiple accept="image/*" hidden />
+          <button id="uploadButton">Select Images</button>
+        </section>
+      </header>
+      <main id="previewList">
+        <!-- <section id="_bacth-12773552620">
+          <div class="section__operation">
+            <div class="group">
+              <label class="custom-checkbox">
+                <input type="checkbox" />
+                <span class="checkmark"></span>
+              </label>
+              <span>Batch</span>
+            </div>
+            <div class="group center">
+              <span>21 item(s) selected</span>
+            </div>
+            <div class="group right">
+              <nav class="inline-batch-operation">
+                <ul>
+                  <li><span class="icon">🔄</span></li>
+                  <li><span class="icon">💾</span></li>
+                  <li><span class="icon">⬇️</span></li>
+                  <li><span class="icon">🗑️</span></li>
+                </ul>
+              </nav>
+              <span class="collapse-icon" aria-expanded="true"></span>
+            </div>
+          </div>
+          <div class="grid">
+            <article class="cell">
+              <div class="imagePreview">
+                <img src="./img/img (1).png" />
+                <span class="loading default-skeleton"></span>
+                <label class="custom-checkbox">
+                  <input type="checkbox" />
+                  <span class="checkmark"></span>
+                </label>
+              </div>
+              <div class="details">
+                <p class="name">
+                  <strong>Capture.JPG</strong><span class="close-cell">❌</span>
+                </p>
+                <p class="size">20.75 KB</p>
+                <p class="size">Nov 19, 2024, 07:37 AM</p>
+                <p class="status">
+                  <strong>Status: </strong><span class="text">Wating to be processed</span>
+                </p>
+              </div>
+            </article>
+          </div>
+        </section> -->
+      </main>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script type="module" src="main2.js"></script>
+  </body>
+</html>
