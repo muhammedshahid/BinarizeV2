@@ -269,9 +269,9 @@ function lazyLoadImage(container, imageSrc) {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 const isProcessed = container.getAttribute('data-isProcessed') === "true";
-                if(isProcessed){
+                if (isProcessed) {
                     centralizedImageStore.updateImageStore(container.id, { previewLoaded: false, thumbnail: null })
-                }else {
+                } else {
                     // thumbnail can be created here
                     // no need to make it early
                     const img = container.querySelector('img')
@@ -480,8 +480,6 @@ async function getImagedata(imageFile) {
     return ctx.getImageData(0, 0, canvas.width, canvas.height);
 }
 
-
-
 function processImages(parentElement) {
     const checkedImages = [...parentElement.querySelectorAll('.grid article:has(input[type="checkbox"]:checked)')]
     resetCheck(checkedImages)
@@ -511,18 +509,18 @@ function isDocument(element) {
     return element === document;
 }
 
-function openDeleteConfirmation(element){
+function openDeleteConfirmation(element) {
     const delBox = document.querySelector('#deleteConfirmation');
     const isDoc = isDocument(element)
     const query = '.grid input[type="checkbox"]:checked';
     const selector = !isDoc ? `#${element.id} ${query}` : `${query}`;
     const count = document.querySelectorAll(selector).length;
-    delBox.setAttribute('data-id', !isDoc?element.id:'');
+    delBox.setAttribute('data-id', !isDoc ? element.id : '');
     delBox.querySelector('.count').innerText = count;
     delBox.classList.replace('hidden', 'show')
 }
 
-function closeDeleteConfirmation(){
+function closeDeleteConfirmation() {
     const delBox = document.querySelector('#deleteConfirmation');
     delBox.classList.replace('show', 'hidden');
     delBox.removeAttribute('data-id');
@@ -530,7 +528,7 @@ function closeDeleteConfirmation(){
 }
 
 function deleteItems(parentElementId) {
-    const isDoc = parentElementId? false: true;
+    const isDoc = parentElementId ? false : true;
     const query = '.grid article:has(input[type="checkbox"]:checked)';
     const selector = !isDoc ? `#${parentElementId} ${query}` : `${query}`;
     const checkedImages = [...document.querySelectorAll(selector)];
@@ -573,7 +571,7 @@ function showProgressBox(title) {
     `;
     container.appendChild(infoBox);
     infoBox.querySelector('.info-close').addEventListener('click', () => {
-      infoBox.remove();
+        infoBox.remove();
     });
     return infoBox.id;
 }
@@ -587,7 +585,7 @@ function downloadFiles(parentElement) {
         title.innerText = message;
         progressBar.style.width = `${progress}%`;
         progressStatus.textContent = `${Math.round(progress)}%`;
-        if(progress == 100 || progress > 100) {
+        if (progress == 100 || progress > 100) {
             setTimeout(() => document.querySelector(progressBox).remove(), 1500);
             return;
         }
@@ -599,38 +597,46 @@ function downloadFiles(parentElement) {
     resetCheck(checkedImages);
     const totalSteps = checkedImageIds.length * 3; // 3 steps per image (fetch, process, zip)
     let completedSteps = 0;
-    const updateProgress = function(message) {
+    const updateProgress = function (message) {
         completedSteps++;
         const progress = (completedSteps / totalSteps) * 100;
-        tracker.call(this , message, progress);
+        tracker.call(this, message, progress);
     };
-    const imageDetails = centralizedImageStore.getImages({imageIds:checkedImageIds});
+    const imageDetails = centralizedImageStore.getImages({ imageIds: checkedImageIds });
     const progressBoxId = showProgressBox('Intialize');
-    imageDetails.map(async imageDetail => {
-        const { processedSource } = imageDetail;
-        const fileName = processedSource.name.match(/^(.*)\.([^.]*)$/);
 
-        // Step 1: Read file
-        updateProgress.call(progressBoxId, `Fetching ${fileName[0]}`);
-        const imgSrc = await readFile(processedSource);
+    async function process_download(imageDetails) {
+        await Promise.all(
+            imageDetails.map(async imageDetail => {
+                const { processedSource } = imageDetail;
+                const fileName = processedSource.name.match(/^(.*)\.([^.]*)$/);
 
-        // Step 2: Process image
-        updateProgress.call(progressBoxId, `Processing ${fileName[0]}`);
-        const image = await preloadImage(imgSrc);
-        const canvas = drawImgOnCanvas(image);
-        const blob = await convertCanvasToBlob(canvas, processedSource.type);
+                // Step 1: Read file
+                updateProgress.call(progressBoxId, `Fetching ${fileName[0]}`);
+                const imgSrc = await readFile(processedSource);
 
-        // Step 3: Add to ZIP
-        updateProgress.call(progressBoxId, `Zipping ${fileName[0]}`);
-        zip.file(`${fileName[1]}.${fileName[2]}`, blob);
-    });
+                // Step 2: Process image
+                updateProgress.call(progressBoxId, `Processing ${fileName[0]}`);
+                const image = await preloadImage(imgSrc);
+                const canvas = drawImgOnCanvas(image);
+                const blob = await convertCanvasToBlob(canvas, processedSource.type);
+
+                // Step 3: Add to ZIP
+                updateProgress.call(progressBoxId, `Zipping ${fileName[0]}`);
+                zip.file(`${fileName[1]}.${fileName[2]}`, blob);
+            })
+        );
+        // Step 4: Download ZIP
+        downloadZip();
+    }
+    process_download(imageDetails);
 }
 
-async function downloadZip(){
+async function downloadZip() {
     const zipBlob = await zip.generateAsync({ type: 'blob' });
     const a = document.createElement('a');
     a.href = URL.createObjectURL(zipBlob);
-    a.download = 'images.zip';
+    a.download = 'Binarized Images.zip';
     a.click();
 }
 window.downloadZip = downloadZip;
