@@ -639,7 +639,7 @@ async function downloadZip() {
     a.download = 'Binarized Images.zip';
     a.click();
 }
-window.downloadZip = downloadZip;
+//window.downloadZip = downloadZip;
 
 function operation(element) {
     const opcode = element.getAttribute('role').trim().toLowerCase();
